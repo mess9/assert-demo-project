@@ -1,0 +1,20 @@
+<configuration>
+
+    <!--    консоль-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>%d{HH:mm:ss.SSS} [%X{x-test-uid:-}] [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+
+    <logger name="ch.qos.logback" level="WARN">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+
+</configuration>

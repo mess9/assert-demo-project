@@ -1,0 +1,29 @@
+openApiGenerate {
+    generatorName = "spring"
+    inputSpec = "$projectDir/src/main/resources/openapi.yaml"
+    outputDir = "$buildDir/generated-sources"
+    apiPackage = "${project.group}.api"
+    modelPackage = "${project.group}.model"
+    generateModelDocumentation = false
+    generateApiDocumentation = false
+    generateModelTests = false
+    generateApiTests = false
+    configOptions = [
+//            dateLibrary         : "java17",
+            java17                   : "true",
+            "hideGenerationTimestamp": "true",
+            "serializationLibrary"   : "jackson",
+            "useTags"                : "true",
+            "delegatePattern"        : "true",
+            "useJakartaEe"           : "true",
+            interfaceOnly            : "true",
+            serializableModel        : "true",
+            skipDefaultInterface     : "true",
+            useSpringBoot3           : "true"
+    ]
+    typeMappings = ['OffsetDateTime': 'OffsetDateTime']
+    importMappings = ['java.time.OffsetDateTime': 'java.time.OffsetDateTime']
+
+}
+
+compileJava.dependsOn("openApiGenerate")
