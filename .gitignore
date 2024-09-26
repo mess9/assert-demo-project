@@ -1,0 +1,3 @@
+# Project exclude paths
+/openapi-petstore/build/classes/java/main/
+/tests/target/
