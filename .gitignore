@@ -1,3 +1,6 @@
 # Project exclude paths
 /openapi-petstore/build/classes/java/main/
 /tests/target/
+/.idea
+/openapi-petstore/build
+/openapi-petstore/.gradle
