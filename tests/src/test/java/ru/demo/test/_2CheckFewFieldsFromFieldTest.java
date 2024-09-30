@@ -40,7 +40,8 @@ public class _2CheckFewFieldsFromFieldTest {
 
         //assert
         step("проверки", () -> SoftAssertions.assertSoftly(s -> {
-            s.assertThat(pet.getCategory()).satisfies(category -> {
+            s.assertThat(pet.getCategory())
+                    .satisfies(category -> {
                 assertThat(category.getId())
                         .isEqualTo(petDb.getCategory().getId());
                 assertThat(category.getName())

@@ -21,7 +21,7 @@ import static ru.demo.util.config.ApiConfig.api;
         PrepareDb.class,
         MongoConnect.class
 })
-public class _8AssertStepTest {
+public class _6AssertStepTest {
 
     final DbStep dbStep = new DbStep();
 
@@ -73,13 +73,12 @@ public class _8AssertStepTest {
                 .as("имя питомца должно быть - %s", petDb.getName())
                 .isEqualTo(petDb.getName());
 
-        assert pet.getStatus() != null;
         s.assertThat(pet.getStatus().getValue())
                 .as("доступность пета к покупке")
                 .isEqualTo(petDb.getStatus().getValue());
     }
 
-    @Step("проверка полея со списком")
+    @Step("проверка поля со списком")
     private static void listCheckPet(SoftAssertions s, Pet pet, PetDto petDb) {
         s.assertThat(pet.getTags())
                 .hasSize(petDb.getTags().size())

@@ -9,10 +9,7 @@ import ru.demo.util.data.PetDto;
 import ru.demo.util.extension.MongoConnect;
 import ru.demo.util.extension.PrepareDb;
 
-import java.math.BigDecimal;
-
 import static io.qameta.allure.Allure.step;
-import static org.assertj.core.api.Assertions.within;
 import static ru.demo.util.config.ApiConfig.api;
 
 
@@ -41,11 +38,8 @@ public class _3NotIntegerNumberTest {
 
         //assert
         step("проверки", () -> SoftAssertions.assertSoftly(s -> {
-//          s.assertThat(pet.getVolume())
-//                  .isEqualTo(petDb.getVolume());
             s.assertThat(pet.getVolume())
-                    .isCloseTo(petDb.getVolume(), within(BigDecimal.valueOf(0.1)));
-
+                    .isEqualTo(petDb.getVolume());
         }));
     }
 

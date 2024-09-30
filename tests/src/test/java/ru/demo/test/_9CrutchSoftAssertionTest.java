@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import ru.demo.step.DbStep;
 import ru.demo.tests.petstore.model.Pet;
+import ru.demo.tests.petstore.model.Tag;
 import ru.demo.util.data.PetDto;
+import ru.demo.util.data.TagDto;
 import ru.demo.util.extension.MongoConnect;
 import ru.demo.util.extension.PrepareDb;
 
@@ -45,10 +47,14 @@ public class _9CrutchSoftAssertionTest {
                         .getPetById()
                         .petIdPath(petDbId)
                         .executeAs(r -> r));
-        pet.setCategory(null);
+
+        pet.setCategory(null);     //создаём ошибки
+        pet.setName("неправильное имя");
 
         //assert
         step("проверки", () -> CrutchSoftAssertions.assertSoftly(s -> {
+            simpleCheckPet(s, pet, petDb);
+            listCheckPet(s, pet, petDb);
 
             catchAssertion(s, pet, petDb);
 
@@ -71,6 +77,29 @@ public class _9CrutchSoftAssertionTest {
         }
     }
 
+    @Step("проверка простых полей")
+    private static void simpleCheckPet(SoftAssertions s, Pet pet, PetDto petDb) {
+        s.assertThat(pet.getId())
+                .as("ид питомца")
+                .isEqualTo(petDb.getId().toHexString());
+
+        s.assertThat(pet.getName())
+                .as("имя питомца должно быть - %s", petDb.getName())
+                .isEqualTo(petDb.getName());
+
+        s.assertThat(pet.getStatus().getValue())
+                .as("доступность пета к покупке")
+                .isEqualTo(petDb.getStatus().getValue());
+    }
+
+    @Step("проверка поля со списком")
+    private static void listCheckPet(SoftAssertions s, Pet pet, PetDto petDb) {
+        s.assertThat(pet.getTags())
+                .hasSize(petDb.getTags().size())
+                .map(Tag::getName)
+                .containsSequence(petDb.getTags().stream().map(TagDto::getName).toList());
+    }
+
     class CrutchSoftAssertions extends AbstractSoftAssertions implements StandardSoftAssertionsProvider {
 
         public static void assertSoftly(Consumer<SoftAssertions> softly) {
@@ -85,8 +114,10 @@ public class _9CrutchSoftAssertionTest {
                 throw new RuntimeException(e);
             }
             softly.accept(assertions);
+
             //ТОЛЬКО если "бла-бла" - единственная найденная ошибка - то пасс, иначе выводим все ошибки считая и эту
             List<AssertionError> assertionErrors = assertions.assertionErrorsCollected();
+
             if (!(assertionErrors.stream().allMatch(e -> e.getMessage().contains("bla bla bla")))) {
                 assertions.assertAll();
             }

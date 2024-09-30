@@ -10,10 +10,8 @@ import ru.demo.util.extension.MongoConnect;
 import ru.demo.util.extension.PrepareDb;
 
 import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
 
 import static io.qameta.allure.Allure.step;
-import static org.assertj.core.api.Assertions.byLessThan;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static ru.demo.util.config.ApiConfig.api;
 
@@ -34,7 +32,7 @@ public class _4DateTest {
         //arrange
         var allOrders = dbStep.getAllOrders();
         OrderDto firstOrder = allOrders.getFirst();
-        firstOrder.setShipDate(OffsetDateTime.now());
+        firstOrder.setShipDate(OffsetDateTime.now()); //меняем дату проверяемого объекта на - сейчас
 
         //act
         Order order = step("получить ордер api", () ->
@@ -44,10 +42,8 @@ public class _4DateTest {
 
         //assert
         step("проверки", () -> assertSoftly(s -> {
-//            s.assertThat(order.getShipDate())
-//                    .isEqualTo(firstOrder.getShipDate());
             s.assertThat(order.getShipDate())
-                    .isCloseTo(firstOrder.getShipDate(), byLessThan(10, ChronoUnit.DAYS));
+                    .isEqualTo(firstOrder.getShipDate());
         }));
     }
 
